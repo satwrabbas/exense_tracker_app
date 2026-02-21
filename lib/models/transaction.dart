@@ -19,7 +19,7 @@ class Transaction extends HiveObject {
   @HiveField(4)
   late bool isExpense;
 
-  // الحقل الجديد: التصنيف
+  
   @HiveField(5)
   late String category; 
 
@@ -29,6 +29,6 @@ class Transaction extends HiveObject {
     required this.amount,
     required this.date,
     required this.isExpense,
-    required this.category, // تمت الإضافة هنا
+    required this.category, 
   });
 }

@@ -1,10 +1,10 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
+
 
 part of 'transaction.dart';
 
-// **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
+
+
+
 
 class TransactionAdapter extends TypeAdapter<Transaction> {
   @override

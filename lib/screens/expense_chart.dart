@@ -11,13 +11,13 @@ class ExpenseChart extends StatelessWidget {
     final provider = Provider.of<TransactionProvider>(context);
     final data = provider.expenseByCategory;
 
-    // ألوان للتصنيفات المختلفة
+    
     final List<Color> colors = [
       Colors.blue, Colors.orange, Colors.purple, Colors.teal, Colors.pink, Colors.brown
     ];
 
     if (data.isEmpty) {
-      return const SizedBox(); // لا تعرض شيء إذا لم تكن هناك مصاريف
+      return const SizedBox(); 
     }
 
     int colorIndex = 0;

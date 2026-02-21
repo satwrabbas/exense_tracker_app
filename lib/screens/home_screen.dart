@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-
-// الاستدعاءات المهمة
+import 'total_statistics_screen.dart'; 
 import '../models/transaction.dart';
 import '../providers/transaction_provider.dart';
-import '../providers/theme_provider.dart'; // هذا السطر الذي كان ينقصنا
+import '../providers/theme_provider.dart';
 import 'expense_chart.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,16 +12,25 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // تعريف الـ Providers الاثنين هنا
     final provider = Provider.of<TransactionProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
+    appBar: AppBar(
         title: const Text('إدارة المصاريف'),
         centerTitle: true,
         actions: [
-          // زر تبديل الوضع المظلم والمضيء
+          
+          IconButton(
+            icon: const Icon(Icons.pie_chart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TotalStatisticsScreen()),
+              );
+            },
+          ),
+          
           IconButton(
             icon: Icon(
               themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
@@ -35,18 +43,18 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // شريط التنقل بين الأشهر
+          
           Container(
             color: themeProvider.isDarkMode 
                 ? Colors.grey.withOpacity(0.2) 
-                : Colors.green.withOpacity(0.1), // تعديل اللون ليناسب الوضعين
+                : Colors.green.withOpacity(0.1),
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_back_ios, size: 20),
-                  onPressed: () => provider.changeMonth(-1), // الشهر السابق
+                  onPressed: () => provider.changeMonth(-1),
                 ),
                 Text(
                   DateFormat('MMMM yyyy').format(provider.currentMonth),
@@ -54,13 +62,13 @@ class HomeScreen extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.arrow_forward_ios, size: 20),
-                  onPressed: () => provider.changeMonth(1), // الشهر القادم
+                  onPressed: () => provider.changeMonth(1),
                 ),
               ],
             ),
           ),
 
-          // الإحصائيات
+          
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -72,12 +80,12 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           
-          // الرسم البياني
+          
           const ExpenseChart(), 
           
           const Divider(),
           
-          // قائمة المعاملات
+          
           Expanded(
             child: provider.monthlyTransactions.isEmpty
                 ? const Center(child: Text('لا توجد معاملات في هذا الشهر!'))
@@ -115,7 +123,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // دالة الإحصائيات
+  
   Widget _buildStatCard(String title, double amount, Color color) {
     return Column(
       children: [
@@ -126,7 +134,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // دالة نافذة الإضافة
+  
   void _showAddDialog(BuildContext context) {
     final titleController = TextEditingController();
     final amountController = TextEditingController();
@@ -134,6 +142,7 @@ class HomeScreen extends StatelessWidget {
     
     final List<String> categories = ['طعام', 'مواصلات', 'فواتير', 'ترفيه', 'راتب', 'أخرى'];
     String selectedCategory = categories.first; 
+    DateTime selectedDate = DateTime.now(); 
 
     showModalBottomSheet(
       context: context,
@@ -175,7 +184,36 @@ class HomeScreen extends StatelessWidget {
                       });
                     },
                   ),
+                  const SizedBox(height: 10),
+
                   
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'التاريخ: ${DateFormat('yyyy-MM-dd').format(selectedDate)}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      TextButton.icon(
+                        icon: const Icon(Icons.calendar_today),
+                        label: const Text('تغيير'),
+                        onPressed: () async {
+                          final DateTime? picked = await showDatePicker(
+                            context: context,
+                            initialDate: selectedDate,
+                            firstDate: DateTime(2020), 
+                            lastDate: DateTime.now(),  
+                          );
+                          if (picked != null && picked != selectedDate) {
+                            setState(() {
+                              selectedDate = picked; 
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -204,7 +242,7 @@ class HomeScreen extends StatelessWidget {
                         id: DateTime.now().toString(),
                         title: titleController.text,
                         amount: double.parse(amountController.text),
-                        date: DateTime.now(),
+                        date: selectedDate, 
                         isExpense: isExpense,
                         category: selectedCategory, 
                       );

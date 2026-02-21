@@ -10,16 +10,16 @@ import 'screens/home_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // تهيئة Hive
+  
   await Hive.initFlutter();
   Hive.registerAdapter(TransactionAdapter());
   
-  // فتح صناديق البيانات
+  
   await Hive.openBox<Transaction>('transactionsBox');
-  await Hive.openBox('settingsBox'); // صندوق الإعدادات للثيم
+  await Hive.openBox('settingsBox'); 
 
   runApp(
-    // استخدام MultiProvider لإدارة عدة Providers
+    
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => TransactionProvider()..fetchTransactions()),
@@ -35,14 +35,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // الاستماع لتغيرات الثيم
+    
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ميزانيتي',
       
-      // إعدادات الوضع المضيء
+      
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.green,
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
 
-      // إعدادات الوضع المظلم
+      
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.green,
@@ -64,13 +64,13 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.grey[850],
           foregroundColor: Colors.white,
         ),
-        cardColor: Colors.grey[800], // لون البطاقات في الوضع المظلم
+        cardColor: Colors.grey[800], 
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Colors.green,
         ),
       ),
 
-      // تحديد الوضع بناءً على الـ Provider
+      
       themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       
       home: const HomeScreen(),

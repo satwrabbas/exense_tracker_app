@@ -11,14 +11,14 @@ class ThemeProvider with ChangeNotifier {
     _loadTheme();
   }
 
-  // تحميل حالة الثيم من Hive
+  
   void _loadTheme() {
     var box = Hive.box(_boxName);
     _isDarkMode = box.get('isDarkMode', defaultValue: false);
     notifyListeners();
   }
 
-  // تبديل الثيم وحفظه
+  
   void toggleTheme() {
     _isDarkMode = !_isDarkMode;
     var box = Hive.box(_boxName);
