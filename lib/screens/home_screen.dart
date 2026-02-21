@@ -1,26 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+
+// الاستدعاءات المهمة
 import '../models/transaction.dart';
 import '../providers/transaction_provider.dart';
-import 'expense_chart.dart'; // استدعاء الرسم البياني
+import '../providers/theme_provider.dart'; // هذا السطر الذي كان ينقصنا
+import 'expense_chart.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
+    // تعريف الـ Providers الاثنين هنا
     final provider = Provider.of<TransactionProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('إدارة المصاريف'),
         centerTitle: true,
+        actions: [
+          // زر تبديل الوضع المظلم والمضيء
+          IconButton(
+            icon: Icon(
+              themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+            ),
+            onPressed: () {
+              themeProvider.toggleTheme();
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
-          // --- الميزة الجديدة: شريط التنقل بين الأشهر ---
+          // شريط التنقل بين الأشهر
           Container(
-            color: Colors.green.withOpacity(0.1),
+            color: themeProvider.isDarkMode 
+                ? Colors.grey.withOpacity(0.2) 
+                : Colors.green.withOpacity(0.1), // تعديل اللون ليناسب الوضعين
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,7 +59,6 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          // ------------------------------------------------
 
           // الإحصائيات
           Padding(
@@ -54,19 +72,19 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           
-          // الرسم البياني (سيتحدث تلقائياً حسب الشهر)
+          // الرسم البياني
           const ExpenseChart(), 
           
           const Divider(),
           
-          // قائمة المعاملات (تم تغييرها لتقرأ monthlyTransactions)
+          // قائمة المعاملات
           Expanded(
             child: provider.monthlyTransactions.isEmpty
                 ? const Center(child: Text('لا توجد معاملات في هذا الشهر!'))
                 : ListView.builder(
                     itemCount: provider.monthlyTransactions.length,
                     itemBuilder: (context, index) {
-                      final tx = provider.monthlyTransactions[index]; // التغيير هنا
+                      final tx = provider.monthlyTransactions[index];
                       return Card(
                         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         child: ListTile(
@@ -97,6 +115,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // دالة الإحصائيات
   Widget _buildStatCard(String title, double amount, Color color) {
     return Column(
       children: [
@@ -107,15 +126,14 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // تحديث نافذة إدخال البيانات
+  // دالة نافذة الإضافة
   void _showAddDialog(BuildContext context) {
     final titleController = TextEditingController();
     final amountController = TextEditingController();
     bool isExpense = true;
     
-    // قائمة التصنيفات
     final List<String> categories = ['طعام', 'مواصلات', 'فواتير', 'ترفيه', 'راتب', 'أخرى'];
-    String selectedCategory = categories.first; // القيمة الافتراضية
+    String selectedCategory = categories.first; 
 
     showModalBottomSheet(
       context: context,
@@ -142,7 +160,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   
-                  // قائمة منسدلة لاختيار التصنيف
                   DropdownButtonFormField<String>(
                     value: selectedCategory,
                     decoration: const InputDecoration(labelText: 'التصنيف'),
@@ -189,7 +206,7 @@ class HomeScreen extends StatelessWidget {
                         amount: double.parse(amountController.text),
                         date: DateTime.now(),
                         isExpense: isExpense,
-                        category: selectedCategory, // إضافة التصنيف هنا
+                        category: selectedCategory, 
                       );
 
                       Provider.of<TransactionProvider>(context, listen: false).addTransaction(newTx);
