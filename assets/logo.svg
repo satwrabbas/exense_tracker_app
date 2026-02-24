@@ -1,28 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
-    
-    <linearGradient id="bg-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#462261" />
-      <stop offset="100%" stop-color="#1D0C28" />
-    </linearGradient>
-    
-    <linearGradient id="text-grad-2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#D7BFFF" />
-      <stop offset="100%" stop-color="#80FFEC" />
+    <linearGradient id="purple-pink-grad" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C04848" />     <!-- أحمر ناعم -->
+      <stop offset="50%" stop-color="#A259FF" />     <!-- بنفسجي فاتح -->
+      <stop offset="100%" stop-color="#480048" />    <!-- بنفسجي ملكي داكن -->
     </linearGradient>
   </defs>
   
   
+  
   <rect width="100" height="100" fill="white" />
   
-  
-  <rect width="100" height="100" rx="20" fill="url(#bg-grad-2)" />
-  
-  
-  <text x="50%" y="30%" dominant-baseline="middle" text-anchor="middle" font-family="'Nunito', 'Comic Sans MS', cursive" font-size="54" font-weight="bold" fill="url(#text-grad-2)">
+  <rect width="100" height="100" rx="20" fill="url(#purple-pink-grad)" />
+  <text x="50%" y="30%" dominant-baseline="middle" text-anchor="middle" font-family="'Nunito', 'Comic Sans MS', cursive" font-size="54" font-weight="bold" fill="#FFFFFF">
     AB
   </text>
-  <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" font-family="'Nunito', 'Comic Sans MS', cursive" font-size="54" font-weight="bold" fill="url(#text-grad-2)">
+  <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" font-family="'Nunito', 'Comic Sans MS', cursive" font-size="54" font-weight="bold" fill="#FFFFFF">
     CE
   </text>
 </svg>
